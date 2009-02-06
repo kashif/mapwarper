@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Map Warper - <%= h(@html_title) || ''-%> </title>
+    <%= stylesheet_link_tag "styles_choc" %>
+
+
+
+    <%= yield :head %>
+  </head>
+  <body>
+    <div id="headerDiv" class="headerDiv">
+     <%= render :partial => 'shared/header' %>
+    </div>
+
+    <%= flash_messages %>
+
+    <%= yield %>
+
+
+
+    <%= render :partial => 'shared/nav' %>
+
+  </body>
+</html>
+

@@ -1,0 +1,68 @@
+<% form_for(@map, :html => {:multipart => true}) do |f| %>
+<div class="column span-12">
+  <p>
+    <b>Title</b><br />
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <b>Description (max 256 chars)</b><br />
+    <%= f.text_area :description %>
+  </p>
+</div>
+<div class="column span-12 last">
+  <p>
+    <b>Publisher</b><br />
+    <%= f.text_field :publisher %>
+  </p>
+
+  <p>
+    <b>Author(s)</b><br />
+    <%= f.text_field :authors %>
+  </p>
+
+  <p>
+    <b>Scale</b><br />
+    <%= f.text_field :scale %>
+  </p>
+
+  <p>
+    <b>Published Date</b><br />
+    <%= f.date_select(:published_date, :include_blank => true, :order => [:day, :month, :year ], :start_year => 1600, :end_year =>Time.now.year)  %>
+  </p>
+
+  <p>
+    <b>Reprint Date (optional)</b><br />
+    <%= f.date_select(:reprint_date, :include_blank => true, :order => [:day, :month, :year ], :start_year => 1600, :end_year =>Time.now.year)  %>
+  </p>
+</div>
+<div class="column span-24">
+ <%- if defined?(page)  && page =~ /edit/ && current_user = @map.owner -%>
+  
+  <p>
+		<label for="upload"><b>Upload An Image File:</b>
+        </label> <br />
+		<%= f.file_field :upload %>
+	</p>
+  <%- end-%>
+  
+	<%- if defined?(page)  && page =~ /new/ -%>
+	<p>
+		<label for="upload"><b>Upload An Image File:</b>
+        <br /><% if @max_size %>
+    Max size: 
+    <%=  number_to_human_size @max_size %>.
+    <% end %>
+        <%= @upload_file_message %>   
+        </label> <br />
+		<%= f.file_field :upload %>
+	</p>
+ 	<%- end -%>
+
+
+
+  <p>
+    <%= f.submit((defined?(page) && page =~ /new/) ? "Create" : "Update" )%>
+  </p>
+</div>
+<% end %>

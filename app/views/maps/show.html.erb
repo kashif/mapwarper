@@ -1,0 +1,100 @@
+<% content_for :head do %>
+ <%= javascript_include_tag "prototype" %>
+ <%= javascript_include_tag "openlayers/OpenLayers" %>
+ <%= javascript_include_tag "progressbar/js/bramus/jsProgressBarHandler" %>
+  <script type="text/javascript">
+    var map_id = '<%=h @map.id -%>';
+    var title  = '<%=u @map.title -%>';
+    <% if @mapstatus != "unloaded"%>
+      var image_width = <%= @map.width %>;
+      var image_height = <%= @map.height %>;
+    <% else%>
+
+      function yayornay(){
+        status = $('map_status').innerHTML; 
+
+        if (status == "unloaded") {
+          statusPoll.stop();
+          Element.hide('loading');
+          // Element.hide('spinner');
+          Element.show("unloaded");
+        } 
+        else if ((status == "available") || (status == "warping"))  {
+
+          statusPoll.stop();
+          Element.hide('loading');
+          // Element.hide('spinner');
+          Element.show("loaded");
+
+        }
+      } 
+
+function updatebar(status) {
+  if (status == 'loading') {
+    var prev = myJsProgressBarHandler.getPercentage('prog');
+    var increment =  Math.round(( (100 - prev) / 100 ) * 20);
+    var newPercentage = prev + increment;
+    myJsProgressBarHandler.setPercentage('prog', newPercentage);
+  
+  }
+  if (status == 'available') {
+   myJsProgressBarHandler.setPercentage('prog', '100');
+  }
+  if (status == 'unloaded') {
+    myJsProgressBarHandler.setPercentage('prog', '10');
+  
+  }
+}
+
+    <% end %>
+
+    var wms_url = '<%= url_for :controller => 'maps', :action => 'wms', :id => @map  -%>';
+  
+    </script>
+
+  <%= javascript_include_tag "unwarped" %>
+
+ <% end -%>
+
+  <% if @mapstatus != "unloaded"  %>
+    <% @onload="init();" %>
+  <% end %>
+ <% if @mapstatus != "unloaded" %>
+<%= @title %>
+ <div id="map"></div>
+
+<% else %>
+
+<div id="loading">
+    Loading map... <span id="spinner"><%= image_tag 'spinner.gif' %></span></div>
+
+
+  <span class="progressBar" id="prog">20%</span>
+  <span id="map_status" class="mapstatus">requesting</span>
+ 
+
+
+        <div id="loaded" style="display:none;" >
+        Map has successfully loaded, please refresh the page to see the full map.
+      </div>
+      <div id="unloaded" style="display:none;">
+        The map did not load properly, please refresh the page and try again.
+        If it does not load properly a second time, please choose another map
+      </div>
+
+  <p>
+  A low resolution preview is shown below.   <br />
+  </p>
+  <%=image_tag @map.upload.url %>
+
+  <%= periodically_call_remote :url => {:action=>'status', :id => @map.id},
+  :update => 'map_status',
+  :frequency => 4,
+  :condition => "!($('map_status').innerHTML == 'available') || !($('map_status').innerHTML == 'warped')",
+  :complete => "yayornay();",
+  :success => "updatebar(request.responseText);",
+  :variable => 'statusPoll'
+%>
+
+<%end%>
+

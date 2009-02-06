@@ -1,0 +1,15 @@
+<%= link_to "&lt; Back", :back %>
+
+<h2>User: <%=h @user.login %></h2>
+<p>Joined on: <%= @user.created_at.to_s(:long) %></p>
+
+
+<h3>User Maps</h3>
+
+<div id = "usermaps">
+  <%=will_paginate @mymaps %>
+  <table>
+  <%= render :partial => 'maps/map', :collection =>  @mymaps unless @mymaps.nil? %>
+</table>
+<%= will_paginate @mymaps %>
+</div>

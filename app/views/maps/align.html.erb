@@ -1,0 +1,113 @@
+<% content_for :head do %>
+<%= javascript_include_tag "prototype" %>
+<%= javascript_include_tag "openlayers/OpenLayers" %>
+
+<% #      <script src="http://dev.openlayers.org/nightly/OpenLayers.js"></script> %>
+<%= javascript_tag "window._token = '#{form_authenticity_token}'" %>
+
+<script type="text/javascript" charset="utf-8">
+  
+  
+	var from_map;
+	var to_map;
+	var active_to_markers;
+	var active_from_markers;
+	var to_markers;
+	var from_markers;
+
+	var map_id = '<%=h @map.id -%>';
+	var title  = '<%=u @map.title -%>';
+
+	var image_width = <%= @map.width %>;
+	var image_height = <%= @map.height %>;
+	
+        var wms_url = '<%= url_for :controller => 'maps', :action => 'wms', :id => @map  -%>';
+        var empty_wms_url =  '<%= url_for :controller => 'maps', :action => 'wms' -%>' ;
+
+		      
+	// init() is in map.js 
+	map_has_bounds = false;
+	
+        map_bounds = new OpenLayers.Bounds();
+</script>
+
+<%= javascript_include_tag "align" %>
+
+<% end %>
+
+<body onload="init();">
+ <h4>Align another map to this one.
+ </h4>
+ 1. The selected map (map <%=@map.id%>) shown on the left is the reference map. <br />
+ 2. You align another map to this, by loading them onto the right.<br />
+ 3. You choose the type of alignment. <br />
+ 4. Once aligned, the page will redirect to the map that you aligned to the original one. <br />
+ <br />
+This alignment tool gives a quick and possibly inaccurate way to align maps next to each other. <br />
+An aligned map will get a copy of the reference maps control points and be shifted to the north, south, east, or west, or if no alignment is chosen, then it will get an unaltered copy. <br />
+
+<div id ="from_map_block">
+ <div id="from_map" class="map"></div>
+ </div>
+ 
+
+ <div id = "to_map_block">
+    <div id="to_map" class="map"></div>
+  </div>
+<div id = "add_layer_control" onClick="Element.show('add_layer');">Add layer</div>
+<div id = "add_layer" >
+
+  <form id="layform" name="layform" onSubmit="addLayerToDest();return false;" action="">
+    Enter in number of map you want aligned, to load: <input type="text" name="layer_num" id="layer_num">
+    <input type="submit" value="Load map" />
+    
+  
+  </form>
+  <br />
+  <span class="fake_link" onClick="Element.hide('add_layer');">hide</span></div>
+
+
+
+<span id="spinner" style="display:none;"><%= image_tag 'spinner.gif' %></span><span id="gcp_notice"></span>
+
+<div id="align_form_div">
+  <fieldset>
+    <legend>Align Map </legend>
+  <% form_for(:maps, :html => {:id => 'align_form', :onsubmit =>'return checkSubmit();' }, :url => {:controller => 'maps', :action => 'warp_aligned' }) do | f | %>
+  <input type="hidden" id="srcmap" name="srcmap" value="<%=@map.id%>" />
+  <input type="hidden" id="destmap" name="destmap" value="" />
+ 
+  The map to be aligned is to the <select name="align" id="align">
+    <option>same area</option>
+    <option>East</option>
+    <option>West</option>
+    <option>North</option>
+    <option>South</option>
+  </select>
+  of the original map. <br />
+  If the map to be aligned has already some control points, would you like these overwritten?
+  <label for="append_yes">Yes:</label>
+  <input type="radio" id="append_yes" name="append" value="false" checked>
+  &nbsp;
+  <label for="append_no">No:</label>
+  <input type="radio" name="append" id="append_no" value="true" >
+<br />
+<br />
+Type of align:<br />
+<label for="align_orig">Using original map? (nicer fit, difficult to edit GCPs)</label>
+
+<input type="radio" id="align_orig" name="align_type" value="original" checked/>
+<br />
+<label for="align_warped">Using rectified map? (worse fit, easier to edit GCPs)</label>
+<input type="radio" id="align_warped" name="align_type" value="warped" />
+<br />
+<br />
+ <%= f.submit "align map!" %>
+<% end %>
+</fieldset>
+
+</div>
+
+
+
+

@@ -1,0 +1,52 @@
+<% content_for :head do %>
+
+        
+        <%= stylesheet_link_tag "ui.slider.css" %>
+        <%= javascript_include_tag "openlayers/OpenLayers" %>
+        
+
+        <%= javascript_include_tag "jquery-1.2.6.min.js" %>
+        <%= javascript_include_tag "jquery-ui-slider"  %>
+        <style type="text/css">
+          #slider {
+         bottom:50px;
+         margin-left:auto;
+         margin-right:auto;
+         width:25em;
+         z-index:1500;
+          
+          }
+          #opacity-info {
+           margin-left:auto;
+         margin-right:auto;
+          width:10em;
+          }
+        </style>
+          <script language="javascript">
+         var map_id = '<%=h @map.id -%>';
+         var title  = '<%=u @map.title -%>';
+         var image_width = <%= @map.width %>
+         var image_height = <%= @map.height %>
+          var wms_url = '<%= url_for :controller => 'maps', :action => 'wms', :id => @map  -%>';
+          var bounds =  new OpenLayers.Bounds(<%=@map.bounds-%>);
+
+        </script>
+    
+ <%= javascript_include_tag "layers" %>
+  <%= javascript_include_tag "warped" %>
+      	
+        <% end #for head%>
+        <% @onload =  "init();" -%>
+                 
+         
+  <%= @title %>
+
+  <div id="map-container">
+  <div id="map">
+  </div>
+<div id="slider"><div class="ui-slider-handle"> </div> </div>
+
+</div>
+<div id="opacity-info">
+Transparency: <input id="opacity" type="text" value="70" size="3" disabled="true" />
+</div>

@@ -1,0 +1,24 @@
+<%= link_to "&lt; Back", :back -%>
+
+<h2>Activity Detail</h2>
+<%= @audit.auditable_type -%>  <%= @audit.auditable_id -%> <br />
+User <%=@audit.uname -%> <br />
+<%=@audit.created_at.to_s(:uk) -%>. <br />
+
+Revision: <%= @audit.version -%> <br />
+Action: <%=@audit.activity_action-%> 
+<br />
+<h3>Details</h3>
+<table  class="activity-details">
+  <tr>
+    <th>Item</th>
+    <th>Value</th>
+  </tr>
+<% @audit.changes.each { |key, value| -%>
+<tr>
+  <td><%= key-%> </td>
+<td> <%= value -%> </td>
+</tr>
+<% } if @audit.changes -%>
+
+</table>

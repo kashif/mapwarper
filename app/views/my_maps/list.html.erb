@@ -1,0 +1,13 @@
+<%= link_to "&lt; Back", :back %>
+
+<h2>My Maps for <%= @user.login %></h2>
+<p>
+Showing list of maps saved or edited by a user.
+</p> 
+
+<%=will_paginate @mymaps %>
+
+<table>
+  <%= render :partial => 'maps/map', :collection => @mymaps unless @mymaps.nil? %>
+</table>
+<%= will_paginate @mymaps %>

@@ -1,0 +1,9 @@
+<h3>Export</h3>
+<p>
+
+<%= link_to "WMS", :controller=>"maps", :action=>"wms", :id =>@map%> <br />
+<%= link_to 'Original', @map.upload.url(:original)  -%> <br />
+<%= link_to 'Download Warped (tif)', "http://#{request.host_with_port}/#{@map.public_warped_tif_url}"  -%> <br />
+<%= link_to 'Download Warped (png)', "http://#{request.host_with_port}/#{@map.public_warped_png_url}"  -%> 
+<%= link_to "(associated aux.xml file)", "http://#{request.host_with_port}/#{@map.public_warped_png_url}.aux.xml" -%> <br />
+</p>

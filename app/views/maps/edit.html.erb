@@ -1,0 +1,8 @@
+<h2>Editing Map Attributes</h2>
+
+<%= error_messages_for :map %>
+
+<%= render :partial => "form", :locals => {:page => "edit"} %>
+
+<%= link_to 'Show', @map %> |
+<%= link_to 'Back', maps_path %>

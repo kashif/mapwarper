@@ -1,0 +1,29 @@
+
+<div id="search-form"><%= render :partial => 'shared/search' -%></div>
+<br />
+<%= link_to "< Back to Home", root_url %>
+<div id="search-title">Browse Maps
+  <%if @query && @query.length > 0 && @query.length > 0 && @query.length > 0 && @query.length > 0 && @query.length > 0 && @query.length > 0 && @query.length > 0 %>&mdash;Searched for "<%=@query%>"
+  <%end-%>
+</div>
+<div id="search-sort">
+  <%= render :partial => 'shared/sort' -%>
+</div>
+<div id="search-pagination-top">
+  <%= will_paginate @map %>
+</div>
+  <table id="" cellpadding="3">
+  <tr>
+    <th></th>
+     <th></th>
+  </tr>
+
+   <%= render :partial => 'map', :collection => @map unless @map.nil? %>
+   
+</table>
+<%= will_paginate @map %>
+
+
+
+
+

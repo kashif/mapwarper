@@ -1,0 +1,53 @@
+<div id="container">
+
+<div id="left-col">
+<div id="video_tutorial"><h2>Overview</h2>
+ Find maps, edit them. Upload an image or a map, and rectify it against a real map.<br />
+ You can then download and use the rectified map in your mapping applications.
+  <h4>
+  <%= link_to "Upload Map!", new_map_path -%>
+  </h4>
+</div>
+
+<div id="whats_this_all_about">
+<h2>What is it?</h2>
+<p>
+open source map warper, beta and a bit unstable!
+</p>
+</div>
+
+</div>
+<div id="right-col">
+  <div id="search-form">
+    <%= render :partial => 'shared/search' -%>
+</div>
+
+<div id="map_list">
+<h2><%= link_to 'Browse All Maps', maps_path %>
+  </h2>
+
+  <% if @my_maps -%>
+    <h3>My Maps</h3>
+
+  <table>
+    <%= render :partial => 'maps/map', :collection => @my_maps  unless @my_maps.nil? %>
+  </table>
+  <%= link_to "See all of My Maps", my_maps_path(:user_id => current_user) -%> 
+<%end -%>
+<br/>
+<h3>Last Rectified Maps</h3>
+
+<table id="map_table" cellpadding="3">
+
+
+  <%= render :partial => 'maps/map', :collection => @map unless @map.nil? %>
+
+</table>
+
+<%= link_to 'See all Rectified Maps', maps_path %>
+
+</div>
+
+</div>
+<div class="clear"></div>
+</div>

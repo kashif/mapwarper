@@ -1,0 +1,19 @@
+<h2>All Users</h2>
+
+<%= will_paginate @users %>
+<table class="usertable">
+  <thead>
+<tr>
+<th>Username</th>
+<th>Email</th>
+<th>Enabled?</th>
+<th>Activated?</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<%= render :partial => "user", :collection => @users %>
+</tbody>
+</table>
+<%= will_paginate @users %>
+

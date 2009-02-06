@@ -1,0 +1,20 @@
+<% @gcp = gcp -%>
+<tr id="<%= gcp.id %>">
+  <td id="gcp_id"><span class="marker_number">&nbsp;<input id="gcp_id" type="hidden" value="<%= gcp.id %>" class="gcp_id" /></span></td>
+    <td><input type="text" name="gcp[]" id="x" value="<%= gcp.x -%>" onchange="update_gcp_field(<%= gcp.id %>, this)" /></td>
+    <td><input type="text" name="gcp[]" id="y"  value="<%= gcp.y -%>" onchange="update_gcp_field(<%= gcp.id %>,this)"/></td>
+    <td> <input type="text" name="gcp[]" id="lon"  value="<%= gcp.lon -%>" onchange="update_gcp_field(<%= gcp.id %>,this)" /></td>
+    <td><input type="text" name="gcp[]" id="lat"  value="<%= gcp.lat -%>"  onchange="update_gcp_field(<%= gcp.id %>,this)" /></td>
+    <td><input type="text" disabled="disabled" name="error" value="<%= sprintf("%.2f",gcp.error) %>" /></td>
+ <td><%= button_to_remote "delete",
+  :url => {:controller => "gcp", :action => "destroy", :id=> gcp.id },
+  :method => "delete",
+  :confirm => "Really delete these points?",
+  :before => "Element.show('spinner');gcp_notice('Deleting...');",
+  :complete => "Element.hide('spinner');",
+  :success => "delete_markers(#{gcp.id});",
+  :failure => "gcp_notice('Sorry, there seems to be an error with this delete request, try again?');" -%></td>
+</tr>
+
+
+

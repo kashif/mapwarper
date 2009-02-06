@@ -1,0 +1,55 @@
+<% content_for :head do  %>
+  <%= javascript_include_tag "prototype" %>
+  <%= javascript_include_tag "openlayers/OpenLayers" %>
+  <script  type="text/javascript">
+    var map_id = '<%=h @map.id -%>';
+    var title  = '<%=u @map.title -%>';
+    var gml_file_exists = <%= @gml_exists %>;
+    var timestamp = Math.round(new Date().getTime() /1000.0);
+
+    var gml_url = "../../mapimages/"+"<%= @map.id%>"+".gml.ol?"+timestamp;
+    var image_width = <%= @map.width %>;
+    var image_height = <%= @map.height %>;
+    var wms_url = '<%= url_for :controller => 'maps', :action => 'wms', :id => @map  -%>';
+  </script>
+  <%= javascript_include_tag "clip" %>
+<% end -%>
+<% @onload =  "init();" -%>
+<%= @title %>
+
+<div id="map"></div>
+
+<div id="cliphelp">
+  <p> 1. Draw polygons around the area you wish to mask.
+</p></div>
+
+<div id="info">
+  <p>2. Then to apply the mask to the map, click "Mask Map!" </p>
+  <% form_remote_tag(:update=>"maskresult",
+    :complete => "Element.hide('spinner')",
+    :before => "deselect();Element.show('spinner');serialize_features();",
+    :html => {:id => 'clip_form2'} ,
+    :url => {:controller => 'maps', :action=> 'save_mask_and_warp', :id => @map.id }) do  -%>
+    <%=  hidden_field_tag "output" %>
+    <div id="maskresult">
+    </div>
+    <%= submit_tag "Mask Map!" %>
+
+
+    <span id="spinner" style="display:none;"> <%= image_tag 'spinner.gif' %></span>
+    <br />
+
+    <%= link_to_remote  'Delete mask',
+      :url => {:controller => 'maps', :action => 'delete_mask', :id => @map },
+      :update => "result",
+      :confirm => "Really delete mask and start over?",
+      :before => "Element.show('spinner')",
+      :success => "destroyMask();",
+      :failure => "alert('that didnt work as expected, sorry');",
+      :complete => "Element.hide('spinner')"
+  %>
+
+
+  <% end -%>
+
+</div>
